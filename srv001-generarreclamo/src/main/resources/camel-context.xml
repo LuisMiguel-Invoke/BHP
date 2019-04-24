@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://camel.apache.org/schema/spring       http://camel.apache.org/schema/spring/camel-spring.xsd">
+
+    <!-- You could also define a traditional camel context here -->
+  	<import resource="bean-definitions.xml"/>
+  	
+    <camelContext xmlns="http://camel.apache.org/schema/spring">
+    	<onException>
+			<exception>cl.bhp.middleware.exception.ServiceException</exception>
+			<handled><constant>true</constant></handled>
+			<setHeader headerName="codigoError"><simple>${exception.codigoError}</simple></setHeader>
+			<setHeader headerName="messageError"><simple>${exception.message}</simple></setHeader>
+			<setHeader headerName="Content-Type"><constant>application/json</constant></setHeader>
+			<setBody>
+  				<simple>${exception.messagebody}</simple>
+			</setBody>
+		</onException>
+		
+        <route>
+            <from uri="jetty:{{service.rest.protocol}}://{{service.rest.host}}:{{service.rest.port}}{{service.rest.resource}}" />
+			<bean ref="bean" method="reclamo"></bean>
+            <log message=">>> ${body}"/>
+            <setHeader headerName="Content-Type"><constant>application/json; charset=UTF-8</constant></setHeader>          
+        </route>
+    </camelContext>
+
+</beans>
