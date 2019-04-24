@@ -13,7 +13,7 @@ public class ServiceException extends Exception{
    public ServiceException(String msg) {
       super(msg);
       codigoError=Integer.parseInt(msg);
-      messagebody= "{'responseCode': "+codigoError+" , 'responseMessage': "+getMessage()+"}";
+      messagebody= "{'responseCode': '"+codigoError+"' , 'responseMessage': '"+getMessage()+"'}";
    }  
    
    /**
