@@ -21,7 +21,7 @@
 		</onException>
 		
         <route>
-            <from uri="jetty:http://localhost:8889/test" />
+            <from uri="jetty:{{service.rest.protocol}}://{{service.rest.host}}:{{service.rest.port}}{{service.rest.resource}}" />
 			<bean ref="bean" method="reclamo"></bean>
             <log message=">>> ${body}"/>
             <setHeader headerName="Content-Type"><constant>application/json; charset=UTF-8</constant></setHeader>          
