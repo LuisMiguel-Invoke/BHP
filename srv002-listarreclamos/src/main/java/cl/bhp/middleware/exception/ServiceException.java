@@ -1,7 +1,5 @@
 package cl.bhp.middleware.exception;
 
-import org.json.JSONObject;
-
 public class ServiceException extends Exception{
 
    private static final long serialVersionUID = 1L;

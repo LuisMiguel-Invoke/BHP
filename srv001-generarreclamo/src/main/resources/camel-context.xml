@@ -5,7 +5,6 @@
        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
        http://camel.apache.org/schema/spring       http://camel.apache.org/schema/spring/camel-spring.xsd">
 
-    <!-- You could also define a traditional camel context here -->
   	<import resource="bean-definitions.xml"/>
   	
     <camelContext xmlns="http://camel.apache.org/schema/spring">

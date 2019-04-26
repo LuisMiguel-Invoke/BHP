@@ -3,8 +3,6 @@ package cl.bhp.middleware.dao;
 import cl.bhp.middleware.exception.ServiceException;
 import cl.bhp.middleware.util.PropertiesUtil;
 
-import java.util.Properties;
-
 import org.apache.log4j.Logger;
 import org.json.JSONObject;
 
@@ -13,40 +11,40 @@ import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 
 /**
- * Clase que permite recuperar información de negocio sobre una estructura mongoDB
- * @author cquezada Red Hat
- *
+ * Clase que permite crear un reclamo en EspoCRM por la API Expuesta
+ * @author Luis Oliveros
  */
+
 public class DataAccessObject {
 	static PropertiesUtil prop = new PropertiesUtil();
 	
 	private static final Logger LOGGER = Logger.getLogger(DataAccessObject.class);
 	
 	/**
-	 * Recupera información de negocio mongo para una lista de informacion de la SIM
-	 * que son buscados por el iccid
-	 * @param iccid
-	 * @return
-	 * @throws ServiceErrorException
+	 * Genera reclamo de un empleado
+	 * recibe los datos por parametro
+	 * @param datos
+	 * @return  
+	 * @throws ServiceException
 	 */
 	
-	@SuppressWarnings("null")
-	public JSONObject generarReclamo (String rut) throws ServiceException {
+	public JSONObject generarReclamo (JSONObject datos) throws ServiceException {
 		long init = System.currentTimeMillis();
 		JSONObject Json = new JSONObject();
 		String URI = prop.getLocalProperties().getProperty("api.espocrm.uri");
 		String auth = prop.getLocalProperties().getProperty("api.espocrm.auth");
 		try {
-
-					
-			HttpResponse<String> responseUser = Unirest.get(URI)
+			
+			HttpResponse<String> responseUser = Unirest.post(URI)
 					  .header("Authorization", "Basic "+auth)
 					  .header("cache-control", "no-cache")
+					  .header("Content-Type", "application/json")
+					  .body(datos)
 					  .asString();
-					 
+					 		
 			System.out.println(responseUser.getStatus());
 			System.out.println(responseUser.getStatusText());
-			
+			System.out.println(responseUser.getBody());
 			Json = new JSONObject(responseUser.getBody());
 			System.out.println(Json.toString());
 			

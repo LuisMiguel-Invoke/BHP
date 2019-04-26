@@ -2,8 +2,9 @@ package cl.bhp.middleware.bean;
 
 import cl.bhp.middleware.dao.DataAccessObject;
 import cl.bhp.middleware.exception.ServiceException;
+
 import org.apache.camel.Exchange;
-import org.json.JSONObject;
+import org.json.JSONArray;
 
 /**
  * Clase que permite la realización de forward de peticiones generadas desde
@@ -13,25 +14,24 @@ import org.json.JSONObject;
  */
 
 public class bean {
-
+	
 	/**
-	 * Genera un reclamo de un empleado en el EspoCRM. mediante la busqueda con el parametro: datos,
-	 * y devuelve una confirmación de haber creado el reclamo
+	 * Obtiene un listado de Reclamos de un empleado. mediante la busqueda con el parametro: rut,
+	 * la cual sera devuelta en un JSON Array como resultado final
 	 * @param ex
-	 * @return JSONObject
+	 * @return JSONArray
 	 * @throws ServiceException
 	 */
-	
-	@SuppressWarnings("unused")
-	public JSONObject reclamo(Exchange ex)  throws ServiceException {
-		JSONObject datos;
-		datos = new JSONObject(ex.getIn().getBody(String.class));
-		
-		if(datos == null) {
+
+	public JSONArray reclamo(Exchange ex)  throws ServiceException {
+		String rut = null;
+		rut = (String) ex.getIn().getHeader("rut");
+
+		if(rut == null) {
 			throw new ServiceException("400");
 		}	
 		
-		return new DataAccessObject().generarReclamo(datos);
+		return new DataAccessObject().listarReclamos(rut);
 	}
 	
 }

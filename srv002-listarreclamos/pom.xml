@@ -21,7 +21,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>cl.bhp.middleware.app</groupId>
-  <artifactId>srv002-listarsolicitudes</artifactId>
+  <artifactId>srv002-listarreclamos</artifactId>
   <version>1.0</version>
 
   <properties>
