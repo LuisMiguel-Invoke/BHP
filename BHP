@@ -1,0 +1,241 @@
+---
+openapi: 3.0.2
+info:
+  title: APIs BHP
+  description: Servicios web de integración para el portal web y/o movil del Portal
+    de Beneficios BHP
+  version: 1.0.0
+paths:
+  /srv002-listarreclamos:
+    summary: Lista los reclamos de un empleado
+    get:
+      summary: Obtener lista de solicitudes de un empleado
+      parameters:
+      - name: rut
+        in: query
+        description: rut del empleado
+        required: true
+        schema: {}
+      responses:
+        200:
+          description: Lista de Reclamos
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/listarReclamos'
+              examples:
+                Reclamos del empleado:
+                  value:
+                  - reclamoId: "00003"
+                    reclamoTitulo: Problema con Gimnsio
+                    reclamoObservacion: Descripción del problema
+                    motivoReclamoName: Reclamo
+                    beneficiarioId: "14634025"
+                    beneficiarioName: Omar Neyra
+                    createAd: 25-04-2017 14:12:00
+                    modificatedAd: 25-04-2017 14:15:00
+                    estado: Iniciada
+                  - reclamoId: "00006"
+                    reclamoTitulo: Problema con Gimnsio
+                    reclamoObservacion: Descripción del problema
+                    motivoReclamoName: Reclamo
+                    beneficiarioId: "14634025"
+                    beneficiarioName: Omar Neyra
+                    createAd: 25-04-2017 14:12:00
+                    modificatedAd: 25-04-2017 14:15:00
+                    estado: Iniciada
+                  - reclamoId: "00007"
+                    reclamoTitulo: Problema con Gimnsio
+                    reclamoObservacion: Descripción del problema
+                    motivoReclamoName: Reclamo
+                    beneficiarioId: "14634025"
+                    beneficiarioName: Omar Neyra
+                    createAd: 25-04-2017 14:12:00
+                    modificatedAd: 25-04-2017 14:15:00
+                    estado: Iniciada
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                bad request:
+                  value:
+                    responseCode: 400
+                    responseMessage: Bad Request
+      servers:
+      - url: http://srv002-listarsolicitudes-losheroesbhp.apps.openshift-desa.losheroes.cl/srv002-listarsolicitudes
+        description: ""
+    servers:
+    - url: http://srv002-listarreclamos-losheroesbhp.apps.openshift-desa.losheroes.cl/srv002-listarreclamos
+      description: ""
+  /srv001-generarreclamo:
+    summary: Solicitud de un reclamo de un empleado
+    description: Genera el reclamo de un empleado en EspoCRM, en el request se recibe
+      un JSON con los datos del reclamo.
+    post:
+      summary: Ingresa un reclamo de un empleado en EspoCRM
+      requestBody:
+        description: '"Datos del reclamo"'
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Reclamo'
+            examples:
+              Reclamo:
+                value:
+                  reclamoTitulo: Problema con Gimnsio
+                  reclamoObservacion: Descripción del problema
+                  motivoReclamoId: "00001"
+                  beneficiarioId: "14634025"
+                  empresaId: "75632486"
+        required: true
+      responses:
+        200:
+          description: |
+            OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/reclamoCreado'
+              examples:
+                'OK ':
+                  value: |
+                    {
+                        "reclamoId":"00006"
+                    }         400:
+          description: '"Bad Request"'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                Bad request:
+                  value:
+                    code: 400
+                    message: Bad request
+        502:
+          description: Bad Gateway
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                Bad Gateway:
+                  value:
+                    responseCode: "502"
+                    responseMessage: Bad Gateway
+      servers:
+      - url: http://srv001-generarreclamo-losheroesbhp.apps.openshift-desa.losheroes.cl/srv001-generarreclamo
+        description: ""
+    servers:
+    - url: http://srv001-generarreclamo-losheroesbhp.apps.openshift-desa.losheroes.cl
+      description: ""
+components:
+  schemas:
+    Error:
+      title: Root Type for Error
+      description: Mensaje de Error
+      type: object
+      properties:
+        code:
+          description: Codigo de Response
+          type: integer
+        message:
+          description: Mensaje de Response
+          type: string
+      example:
+        code: 400
+        message: Bad request
+    Reclamo:
+      title: Root Type for Reclamo
+      description: Json post para la creación del reclamo
+      type: object
+      properties:
+        reclamoTitulo:
+          description: Resumen o Asunto del reclamo generado por el empleado
+          type: string
+        reclamoObservacion:
+          description: Descripción del reclamo ingresada por el empleado en el portal
+          type: string
+        motivoReclamoId:
+          description: ID de la Categoria del reclamo
+          type: string
+        beneficiarioId:
+          description: |
+            ID/rut del Empleado
+          type: string
+        empresaId:
+          description: ID/rut de la empresa del empleado
+          type: string
+      example: |-
+        {
+            "reclamoTitulo": "Problema con Gimnsio",
+            "reclamoObservacion": "Descripción del problema",
+            "motivoReclamoId": "00001",
+            "beneficiarioId": "14634025",
+            "empresaId": "75632486"
+        }
+    listarReclamos:
+      title: Root Type for listarReclamos
+      description: Listado de reclamos de un empleado
+      type: object
+      properties:
+        reclamoId:
+          description: Id del reclamo
+          type: string
+        reclamoTitulo:
+          description: Resumen o Asunto del reclamo del empleado
+          type: string
+        reclamoObservacion:
+          description: Observaciones del empleado del reclamo
+          type: string
+        motivoReclamoName:
+          description: Nombre de la categoria
+          type: string
+        beneficiarioId:
+          description: ID/rut del empĺeado
+          type: string
+        beneficiarioName:
+          description: Nombre del empleado
+          type: string
+        createAd:
+          description: Fecha de creación del reclamo
+          type: string
+        modificatedAd:
+          description: Fecha de modificación del reclamo
+          type: string
+        estado:
+          description: Estado del reclamo del empleado
+          type: string
+      example:
+      - reclamoId: "00003"
+        reclamoTitulo: Problema con Gimnsio
+        reclamoObservacion: Descripción del problema
+        motivoReclamoName: Reclamo
+        beneficiarioId: "14634025"
+        beneficiarioName: Omar Neyra
+        createAd: 25-04-2017 14:12:00
+        modificatedAd: 25-04-2017 14:15:00
+        estado: Asignada
+      - reclamoId: "00006"
+        reclamoTitulo: Problema con Cine
+        reclamoObservacion: Descripción del problema
+        motivoReclamoName: Reclamo
+        beneficiarioId: "14634025"
+        beneficiarioName: Omar Neyra
+        createAd: 26-04-2017 10:12:00
+        modificatedAd: 26-04-2017 15:15:00
+        estado: Iniciada
+    reclamoCreado:
+      title: Root Type for reclamoCreado
+      description: Reclamo creado exitosamente
+      type: object
+      properties:
+        reclamoId:
+          type: string
+      example: |-
+        {
+            "reclamoId":"00006"
+        }
