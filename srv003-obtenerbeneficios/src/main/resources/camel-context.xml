@@ -31,7 +31,7 @@
 		
         <route>
             <from uri="jetty:{{service.rest.protocol}}://{{service.rest.host}}:{{service.rest.port}}{{service.rest.resource}}" />
-			<bean ref="bean" method="reclamo"></bean>
+			<bean ref="bean" method="beneficios"></bean>
             <setHeader headerName="Content-Type"><constant>application/json; charset=UTF-8</constant></setHeader>          
 <!--         	<setBody> -->
 <!--   				<simple>{"responseCode":"200","responseMessage":"OK"}</simple> -->

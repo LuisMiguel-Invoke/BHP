@@ -28,7 +28,7 @@ public class DataAccessObject {
 	 * @throws ServiceException
 	 */
 	
-	public JSONObject generarReclamo (JSONObject datos) throws ServiceException {
+	public JSONObject solicitarbeneficio (JSONObject datos) throws ServiceException {
 		long init = System.currentTimeMillis();
 		JSONObject Json = new JSONObject();
 		JSONObject reclamoId = new JSONObject();
