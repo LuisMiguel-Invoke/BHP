@@ -31,6 +31,8 @@ public class ServiceException extends Exception{
 		   return "Invalid Data Type";
 	   case 455:
 		   return "DataBase Error Exception";
+	   case 456:
+		   return "Api EspoCRM Bad Response";
 	   case 458:
 		   return "Gateway Internal Error";
 			   

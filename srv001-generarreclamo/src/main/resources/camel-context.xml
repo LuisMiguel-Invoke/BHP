@@ -8,6 +8,8 @@
   	<import resource="bean-definitions.xml"/>
   	
     <camelContext xmlns="http://camel.apache.org/schema/spring">
+<!--     	<propertyPlaceholder id="placeholder" location="file:${env:APP_ENV}"/> -->
+		<propertyPlaceholder id="properties" location="application.properties"/>
     	<onException>
 			<exception>cl.bhp.middleware.exception.ServiceException</exception>
 			<handled><constant>true</constant></handled>
@@ -33,9 +35,6 @@
             <from uri="jetty:{{service.rest.protocol}}://{{service.rest.host}}:{{service.rest.port}}{{service.rest.resource}}" />
 			<bean ref="bean" method="reclamo"></bean>
             <setHeader headerName="Content-Type"><constant>application/json; charset=UTF-8</constant></setHeader>          
-<!--         	<setBody> -->
-<!--   				<simple>{"responseCode":"200","responseMessage":"OK"}</simple> -->
-<!-- 			</setBody> -->
 			<log message="Response Body: ${body}"/>
         </route>
     </camelContext>

@@ -31,9 +31,9 @@ public class DataAccessObject {
 	public JSONObject generarReclamo (JSONObject datos) throws ServiceException {
 		long init = System.currentTimeMillis();
 		JSONObject Json = new JSONObject();
-		JSONObject reclamoId = new JSONObject();
 		String URI = prop.getLocalProperties().getProperty("api.espocrm.uri");
 		String auth = prop.getLocalProperties().getProperty("api.espocrm.auth");
+		
 		try {
 			
 			HttpResponse<String> responseUser = Unirest.post(URI)
@@ -43,20 +43,18 @@ public class DataAccessObject {
 					  .body(datos)
 					  .asString();
 					 		
-			System.out.println(responseUser.getStatus());
-			System.out.println(responseUser.getStatusText());
-			System.out.println(responseUser.getBody());
+			LOGGER.info("Response EspoCRM Status:"+responseUser.getStatus()+" Message: "+responseUser.getStatusText());
 			Json = new JSONObject(responseUser.getBody());
-			System.out.println(Json.toString());
-			reclamoId.put("reclamoId", Json.get("reclamoId"));
 
 			} catch (UnirestException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
-				throw new ServiceException("400");
+				throw new ServiceException("456");
+			} catch (Exception e) {
+				e.printStackTrace();
+				throw new ServiceException("456");
 			}
 		
 		LOGGER.info("Tiempo en consulta EspoCRM "+(System.currentTimeMillis() - init)+" ms.");
-		return reclamoId;	
+		return Json;	
 	}
 }

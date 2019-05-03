@@ -14,28 +14,21 @@ public class PropertiesUtil {
 	private static InputStream input = null;
 
 
-	public static Properties getProperties (String fileName) {
-		String propertiesFile="";
+	public static Properties getPropertiesEnvironment(String fileName) {
+		String propertiesFile = "";
 		Map<String, String> env = System.getenv();
 		for (Entry<String, String> envName : env.entrySet()) {
-			if(envName.getKey().equals(fileName)) {
+			if (envName.getKey().equals(fileName)) {
 				propertiesFile = envName.getValue();
 			}
 		}
 		Properties prop = new Properties();
 		try {
-			String propFileName = propertiesFile;
-			input = new FileInputStream(propertiesFile);
-			
-			if (input != null) {
-				prop.load(input);
-			} else {
-				throw new FileNotFoundException("property file '" + propFileName + "' not found in the classpath");
-			}
+			prop.load(new FileInputStream(propertiesFile));
 		} catch (IOException e1) {
-			e1.printStackTrace();
+			System.out.println("Property error :"+ e1.toString());
 		}
-      	return prop;
+		return prop;
 	}
 	
 public Properties getLocalProperties() {
